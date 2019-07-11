@@ -26,7 +26,7 @@ document.addEventListener('DOMContentLoaded', function() {
       result.textContent = 'サーバーエラーが発生しました。';
     }, false);
     */
-    xhr.open('GET', 'kigisu.php.xdomain.jp/hello_ajax.php?name=' +
+    xhr.open('GET', 'http://kigisu.php.xdomain.jp/hello_ajax.php?name=' +
       encodeURIComponent(document.getElementById('name').value), true);
     xhr.send(null);
   }, false);
