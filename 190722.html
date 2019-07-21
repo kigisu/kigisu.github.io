@@ -1,0 +1,54 @@
+<html>
+  <meta http-equiv="content-type" charset="utf-8">
+    <head>
+        <script src="https://www.gstatic.com/firebasejs/5.0.1/firebase-app.js"></script>
+        <script src="https://www.gstatic.com/firebasejs/5.0.1/firebase-database.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.0.0-alpha1/jquery.min.js"></script>
+    </head>
+    <body>
+        コメントしてみよう！
+        <div>
+            <input id="nameForm" placeholder="NAME">
+            <form id=form>
+              <input id="messageForm" placeholder="MESSAGE">
+            </form>
+            <button id="send">SEND</button>
+        </div>
+        <ul id="messages"></ul>
+        <script>
+        // Initialize Firebase
+        var firebaseConfig = {
+          apiKey: "AIzaSyDtXB0qEni8HYci1FZAqpeNRocmomo8SAk",
+          authDomain: "test-e0334.firebaseapp.com",
+          databaseURL: "https://test-e0334.firebaseio.com",
+          projectId: "test-e0334",
+          storageBucket: "",
+          messagingSenderId: "397131576418",
+          appId: "1:397131576418:web:c512d7f4f6f664c9"
+        };
+        firebase.initializeApp(firebaseConfig);
+
+
+            var personRef = firebase.database().ref().child('person');
+
+            personRef.on('child_added',function(snapshot){
+              var person=snapshot.val();
+
+              $('<li>').text(person.name+': '+person.message+'('+person.time+')').prependTo('#messages');
+            });
+
+            $('#send').click(function(){
+              var rawTime =new Date();
+
+              var processedTime=rawTime.getHours()+'時'+rawTime.getMinutes()+'分'+rawTime.getSeconds()+'秒';
+              personRef.push({
+              name: $('#nameForm').val(),
+              message: $('#messageForm').val(),
+              time: processedTime,
+              });
+              var messageFormElement=document.getElementById('form');
+              messageFormElement.reset();
+            });
+        </script>
+    </body>
+</html>
