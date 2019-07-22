@@ -1,0 +1,40 @@
+<html>
+  <meta http-equiv="content-type" charset="utf-8">
+    <head>
+        <script src="https://www.gstatic.com/firebasejs/5.0.1/firebase-app.js"></script>
+        <script src="https://www.gstatic.com/firebasejs/5.0.1/firebase-database.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.0.0-alpha1/jquery.min.js"></script>
+    </head>
+    <body>
+        応援してみよう!
+        <div>
+            <input id="nameForm" placeholder="NAME">
+
+            <button id="send">応援する</button>
+        </div>
+        <ul id="messages"></ul>
+        <script>
+        // Initialize Firebase
+        var firebaseConfig = {
+          apiKey: "AIzaSyCBYTGWoLv6mC9g-KA_0uZa3h7RPOd_Kyw",
+          authDomain: "test-efb85.firebaseapp.com",
+          databaseURL: "https://test-efb85.firebaseio.com",
+          projectId: "test-efb85",
+          storageBucket: "",
+          messagingSenderId: "1072583119155",
+          appId: "1:1072583119155:web:23134d32b26da783"
+        };
+        firebase.initializeApp(firebaseConfig);
+
+
+            var personRef = firebase.database().ref().child('person');
+
+
+            $('#send').click(function(){
+              personRef.push({
+              name: $('#nameForm').val(),
+              });
+            });
+        </script>
+    </body>
+</html>

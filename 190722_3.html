@@ -1,0 +1,100 @@
+<html>
+  <meta http-equiv="content-type" charset="utf-8">
+    <head>
+        <script src="https://www.gstatic.com/firebasejs/5.0.1/firebase-app.js"></script>
+        <script src="https://www.gstatic.com/firebasejs/5.0.1/firebase-database.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.0.0-alpha1/jquery.min.js"></script>
+        <style type="text/css">
+        #id_canvas {
+          position:absolute;
+          top: 10px;
+          left: 10px;
+          z-index: 1;
+        }
+        </style>
+    </head>
+    <body>
+      <canvas id="id_canvas" width="600" height="441"></canvas>
+        <script>
+        // Initialize Firebase
+        var firebaseConfig = {
+          apiKey: "AIzaSyCBYTGWoLv6mC9g-KA_0uZa3h7RPOd_Kyw",
+          authDomain: "test-efb85.firebaseapp.com",
+          databaseURL: "https://test-efb85.firebaseio.com",
+          projectId: "test-efb85",
+          storageBucket: "",
+          messagingSenderId: "1072583119155",
+          appId: "1:1072583119155:web:fcab91958d31d45c"
+        };
+        firebase.initializeApp(firebaseConfig);
+
+          var canvas;
+          var ctx;
+          var count;
+          onload = function(){
+          	canvas = document.getElementById('id_canvas');
+          	ctx = canvas.getContext('2d');
+          	ctx.strokeStyle="#000000";
+          	ctx.rect(0,0,600,441);
+          	ctx.lineWidth=1;
+          	ctx.stroke();
+          	canvas.addEventListener('click',clickfunc,false);
+            count=0;
+          }
+
+          function clickfunc(event){
+            //writeText("がいいねしました",randomNum(1,590),randomNum(1,431));
+          }
+
+            var personRef = firebase.database().ref().child('person');
+
+            personRef.on('child_added',function(snapshot){
+              var person=snapshot.val();
+              if(count<102){
+              ctx.beginPath();
+              ctx.arc(300,220,80,Math.PI*2/100*count,Math.PI*2/100*(count+1));
+              ctx.lineTo(300,220);
+              ctx.fill();
+              }
+              count=count+1;
+              writeText(person.name+"が応援しました",randomNum(1,590),randomNum(1,431));
+              if(count>100){
+                writeText("Congratulations!",300,350,px=40,color="green");
+              }
+            });
+
+            $('#send').click(function(){
+              var rawTime =new Date();
+
+              var processedTime=rawTime.getHours()+'時'+rawTime.getMinutes()+'分'+rawTime.getSeconds()+'秒';
+              personRef.push({
+              name: $('#nameForm').val(),
+              message: $('#messageForm').val(),
+              time: processedTime,
+              });
+              var messageFormElement=document.getElementById('form');
+              messageFormElement.reset();
+            });
+
+            function writeText(str,sx,sy,px=20,color="black"){
+            	var pa= px+"px 'Times New Roman'";
+            	ctx.beginPath();
+            	ctx.fillStyle=color;
+            	ctx.font=pa;
+            	ctx.fillText(str,sx,sy);
+            	return 0;
+            }
+
+            function randomNum(min,max){
+            	var truth = 1;
+            	while(truth===1){
+            			var random= Math.floor(Math.pow(10,Math.floor(Math.log(max)/Math.log(10)+1))*Math.random());
+            			if(min<random&&random<max){
+            				break;
+            			}
+            	}
+            	return random;
+            }
+        </script>
+    </body>
+</html>
